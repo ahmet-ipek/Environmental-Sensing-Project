@@ -90,7 +90,7 @@ This project implements firmware for an environmental sensing device that reads 
 
 ### Development Tools
 
-- **MCU:** STM32F4 series microcontroller.
+- **MCU:** STM32F446RE microcontroller.
 - **IDE:** STM32CubeIDE.
 - **Libraries:** STM32 HAL libraries for peripheral management (I2C, UART, Timers).
 
@@ -111,29 +111,3 @@ This project implements firmware for an environmental sensing device that reads 
    - **Range:** Approximately 260–1260 hPa.
    - [LPS25HB Datasheet](https://www.st.com/resource/en/datasheet/lps25hb.pdf)
 
----
-
-## Deviations and Future Work
-
-- **Communication Interface:**  
-  - **Deviation:** UART was used instead of BLE.
-  - **Future Work:** Integrate BLE when hardware is available.
-
-- **Sensor Integration:**  
-  - **Deviation:** Real sensor interfacing code is available but commented out; simulation is used.
-  - **Future Work:** Activate real sensor code and validate with hardware tests.
-
-- **Bonus Features:**  
-  - RTOS-based tasks were not implemented.
-  - Future enhancements may include implementing a producer-consumer model with proper synchronization.
-
----
-
-## Getting Started
-
-To compile and run the project:
-
-1. **Clone the Repository:**
-   ```bash
-   git clone https://github.com/yourusername/Environmental-Sensing-Project.git
-   cd Environmental-Sensing-Project
