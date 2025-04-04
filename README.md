@@ -33,7 +33,7 @@ This project implements firmware for an environmental sensing device that reads 
 
 ## System Architecture
 
-- **MCU:** STM32F4 series microcontroller.
+- **MCU:** STM32F446RE microcontroller.
 - **Sensors:**
   - **LM75A:** Temperature sensor (I2C address: 0x48).
   - **Si7021:** Humidity sensor (I2C address: 0x40).
@@ -52,16 +52,25 @@ This project implements firmware for an environmental sensing device that reads 
 ### Sensor Interfaces
 
 - **LM75A Temperature Sensor:**  
-  - Initialization checks sensor presence via I2C read.
-  - Reads temperature in a 9-bit two’s complement format and converts to Celsius.
+  - I2C Interface : Supports up to 8 devices on the same bus via address pins (A2, A1, A0).
+  - 9-bit Temperature Resolution : Accuracy of ±2°C (–25°C to 100°C) and ±3°C (–55°C to 125°C).
+  - Registers :
+  - Temperature Register (0x00) : Read-only, updates every 100ms (or 300ms at extreme temps).
 
-- **Si7021 Humidity Sensor:**  
-  - Initialization verifies the sensor by reading an electronic ID.
-  - Issues a measurement command and calculates the relative humidity.
+- **Si7021 Humidity Sensor:**
+  The Si7021-A20 is a digital humidity and temperature sensor with:
+  - I2C Interface : 7-bit address 0x40 (fixed, no address pins).
+  - Humidity : ±3% RH (0–80% RH).
+  - Registers :
+  - Humidity/Temperature Measurement Commands (0xE5, 0xE3).
+  - Electronic ID Register for device identification.
 
-- **LPS25HB Pressure Sensor:**  
-  - Verifies sensor identity via the WHO_AM_I register.
-  - Reads and scales three bytes of data to produce a pressure value in hPa.
+- **LPS25HB Pressure Sensor:**
+  The LPS25HB is a digital pressure sensor with:
+  - I2C Interface : Default I2C address 0x5C (SA0=0).
+  - Key Registers :
+  - WHO_AM_I (0x0F) : Identification register (default 0xBD).
+  - CTRL_REG1 (0x20) : Controls power and ODR.
 
 ### Data Filtering and Buffering
 
