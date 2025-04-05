@@ -81,16 +81,15 @@ This project implements firmware for an environmental sensing device that reads 
   - Filtered sensor data is stored in a fixed-size circular buffer.  
   - When the buffer is full, the oldest data is overwritten.
 
-### Data Transmission
+### Data Read & Transmission
 
 - **Sampling:**  
   - Timer interrupts trigger sensor sampling every second.
   - Sensor data is either acquired from hardware or simulated.
   
 - **Transmission:**  
-  - Every 30 seconds, sensor data is aggregated.
+  - Every 30 seconds, sensor data is collected.
   - Statistics (standard deviation, max, min, and median) are calculated and transmitted over UART.
-  - Real BLE communication code is prepared but commented out due to hardware unavailability.
 
 ---
 
