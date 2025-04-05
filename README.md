@@ -55,7 +55,7 @@ This project implements firmware for an environmental sensing device that reads 
   - [LM75A Datasheet](https://www.ti.com/lit/ds/symlink/lm75a.pdf)
 
 - **Si7021 Humidity Sensor:**
-The Si7021-A20 is a digital humidity and temperature sensor with:
+  - The Si7021-A20 is a digital humidity and temperature sensor with:
   - I2C Interface : 7-bit address 0x40 (fixed, no address pins).
   - Humidity : ±3% RH (0–80% RH).
   - Registers :
@@ -64,7 +64,7 @@ The Si7021-A20 is a digital humidity and temperature sensor with:
   - [Si7021 Datasheet](https://www.silabs.com/documents/public/data-sheets/Si7021-A20.pdf)
 
 - **LPS25HB Pressure Sensor:**
-  The LPS25HB is a digital pressure sensor with:
+  - The LPS25HB is a digital pressure sensor with:
   - I2C Interface : Default I2C address 0x5C (SA0=0).
   - Key Registers :
   - WHO_AM_I (0x0F) : Identification register (default 0xBD).
