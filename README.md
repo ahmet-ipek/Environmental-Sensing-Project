@@ -55,7 +55,7 @@ This project implements firmware for an environmental sensing device that reads 
   - [LM75A Datasheet](https://www.ti.com/lit/ds/symlink/lm75a.pdf)
 
 - **Si7021 Humidity Sensor:**
-  The Si7021-A20 is a digital humidity and temperature sensor with:
+The Si7021-A20 is a digital humidity and temperature sensor with:
   - I2C Interface : 7-bit address 0x40 (fixed, no address pins).
   - Humidity : ±3% RH (0–80% RH).
   - Registers :
