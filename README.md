@@ -13,7 +13,7 @@ This project implements firmware for an environmental sensing device that reads 
 - [Detailed Implementation](#detailed-implementation)
   - [Sensor Interfaces](#sensor-interfaces)
   - [Data Filtering and Buffering](#data-filtering-and-buffering)
-  - [Data Transmission](#data-transmission)
+  - [Data Read & Transmission](#data-read-&-transmittion)
 
 ---
 
