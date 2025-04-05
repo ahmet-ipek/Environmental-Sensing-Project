@@ -27,7 +27,6 @@ This project implements firmware for an environmental sensing device that reads 
 - **Data Filtering:** Implement a moving median filter to smooth out sensor data.
 - **Data Buffering:** Store filtered values in a circular buffer.
 - **Data Transmission:** Transmit aggregated sensor statistics every 30 seconds using UART (substitute for BLE).
-- **Bonus Task:** (Not implemented) RTOS-based producer-consumer model for sensor data management.
 
 ---
 
