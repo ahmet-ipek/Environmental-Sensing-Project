@@ -15,9 +15,6 @@ This project implements firmware for an environmental sensing device that reads 
   - [Data Filtering and Buffering](#data-filtering-and-buffering)
   - [Data Transmission](#data-transmission)
 - [Development Tools and Datasheets](#development-tools-and-datasheets)
-- [Deviations and Future Work](#deviations-and-future-work)
-- [Getting Started](#getting-started)
-- [License](#license)
 
 ---
 
