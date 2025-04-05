@@ -14,7 +14,6 @@ This project implements firmware for an environmental sensing device that reads 
   - [Sensor Interfaces](#sensor-interfaces)
   - [Data Filtering and Buffering](#data-filtering-and-buffering)
   - [Data Transmission](#data-transmission)
-- [Development Tools and Datasheets](#development-tools-and-datasheets)
 
 ---
 
@@ -30,6 +29,7 @@ This project implements firmware for an environmental sensing device that reads 
 ## System Architecture
 
 - **MCU:** STM32F446RE microcontroller.
+- **IDE:** STM32CubeIDE.
 - **Sensors:**
   - **LM75A:** Temperature sensor (I2C address: 0x48).
   - **Si7021:** Humidity sensor (I2C address: 0x40).
@@ -52,6 +52,7 @@ This project implements firmware for an environmental sensing device that reads 
   - 9-bit Temperature Resolution : Accuracy of ±2°C (–25°C to 100°C) and ±3°C (–55°C to 125°C).
   - Registers :
   - Temperature Register (0x00) : Read-only, updates every 100ms (or 300ms at extreme temps).
+  - [LM75A Datasheet](https://www.ti.com/lit/ds/symlink/lm75a.pdf)
 
 - **Si7021 Humidity Sensor:**
   The Si7021-A20 is a digital humidity and temperature sensor with:
@@ -60,6 +61,7 @@ This project implements firmware for an environmental sensing device that reads 
   - Registers :
   - Humidity/Temperature Measurement Commands (0xE5, 0xE3).
   - Electronic ID Register for device identification.
+  - [Si7021 Datasheet](https://www.silabs.com/documents/public/data-sheets/Si7021-A20.pdf)
 
 - **LPS25HB Pressure Sensor:**
   The LPS25HB is a digital pressure sensor with:
@@ -67,6 +69,7 @@ This project implements firmware for an environmental sensing device that reads 
   - Key Registers :
   - WHO_AM_I (0x0F) : Identification register (default 0xBD).
   - CTRL_REG1 (0x20) : Controls power and ODR.
+  - [LPS25HB Datasheet](https://www.st.com/resource/en/datasheet/lps25hb.pdf)
 
 ### Data Filtering and Buffering
 
@@ -90,28 +93,5 @@ This project implements firmware for an environmental sensing device that reads 
 
 ---
 
-## Development Tools and Datasheets
 
-### Development Tools
-
-- **MCU:** STM32F446RE microcontroller.
-- **IDE:** STM32CubeIDE.
-- **Libraries:** STM32 HAL libraries for peripheral management (I2C, UART, Timers).
-
-### Sensor Datasheets
-
-1. **LM75A Temperature Sensor:**
-   - **Features:** 9-bit digital temperature sensor, low power.
-   - **Range:** –55°C to +125°C.
-   - [LM75A Datasheet](https://www.ti.com/lit/ds/symlink/lm75a.pdf)
-
-2. **Si7021 Humidity Sensor:**
-   - **Features:** High accuracy humidity and temperature sensor.
-   - **Range:** Humidity 0–100% RH; Temperature –10°C to +85°C.
-   - [Si7021 Datasheet](https://www.silabs.com/documents/public/data-sheets/Si7021-A20.pdf)
-
-3. **LPS25HB Pressure Sensor:**
-   - **Features:** MEMS-based absolute pressure sensor.
-   - **Range:** Approximately 260–1260 hPa.
-   - [LPS25HB Datasheet](https://www.st.com/resource/en/datasheet/lps25hb.pdf)
 
