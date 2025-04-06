@@ -6,17 +6,6 @@ This project implements firmware for an environmental sensing device that reads 
 
 ---
 
-## Table of Contents
-
-- [Project Objectives](#project-objectives)
-- [System Architecture](#system-architecture)
-- [Detailed Implementation](#detailed-implementation)
-  - [Sensor Interfaces](#sensor-interfaces)
-  - [Data Filtering and Buffering](#data-filtering-and-buffering)
-  - [Data Read & Transmission](#data-read-&-transmittion)
-
----
-
 ## Project Objectives
 
 - **Sensor Data Acquisition:** Sample environmental parameters (temperature, humidity, and pressure) at 1 Hz using three I2C sensors.
@@ -40,6 +29,35 @@ This project implements firmware for an environmental sensing device that reads 
 | LM75A     | Temperature | 0x48    | 9-bit resolution, ±2°C accuracy                   | https://www.ti.com/lit/ds/symlink/lm75a.pdf                        |
 | Si7021    | Humidity    | 0x40    | ±3% RH accuracy, fixed I2C address                | https://www.silabs.com/documents/public/data-sheets/Si7021-A20.pdf |
 | LPS25HB   | Pressure    | 0x5C    | Digital sensor with WHO_AM_I and CTRL registers   | https://www.st.com/resource/en/datasheet/lps25hb.pdf               |
+
+---
+
+## ⏱️ Timer Configuration
+
+Two hardware timers manage system tasks:
+
+- **Timer 3 (TIM3):**  
+  - Configured to trigger an interrupt every 1 second for sensor data acquisition.
+  - Example configuration snippet:
+    ```c
+    // 1 Hz configuration: (84MHz / (Prescaler+1) / (Period+1)) = 1 Hz
+    htim3.Instance = TIM3;
+    htim3.Init.Prescaler = 8399;
+    htim3.Init.Period = 9999;
+    HAL_TIM_Base_Init(&htim3);
+    ```
+- **Timer 2 (TIM2):**  
+  - Configured to trigger an interrupt every 30 seconds to transmit data.
+  - Example configuration snippet:
+    ```c
+    // 30-second configuration: (84MHz / (Prescaler+1) / (Period+1)) = 1/30 Hz
+    htim2.Instance = TIM2;
+    htim2.Init.Prescaler = 8399;
+    htim2.Init.Period = 29999;
+    HAL_TIM_Base_Init(&htim2);
+    ```
+
+These timers are verified using a logic analyzer, confirming the precise 1 Hz and 30-second intervals.
 
 ---
 
@@ -135,7 +153,7 @@ This section explains, step by step, how sensor readings are performed via the I
     - **Conversion:**  
       - Divides the raw value by `4096.0f` to convert it to hPa.
       - Returns the computed pressure.
-
+---
 
 ### Data Filtering and Buffering
 
