@@ -32,16 +32,14 @@ This project implements firmware for an environmental sensing device that reads 
 |---------------------|-----------------------------------------------------|
 | MCU                 | STM32F446RE (ARM Cortex-M4)                         |
 | IDE                 | STM32CubeIDE                                        |
-| Interface           | I2C (sensors), UART (transmission)                 |
-| Interrupt Timers    | TIM3 (1 Hz for sampling), TIM2 (30s for sending)   |
+| Interface           | I2C (sensors), UART (transmission)                  |
+| Interrupt Timers    | TIM3 (1 Hz for sampling), TIM2 (30s for sending)    |
 
-### 🔌 Sensors
-
-| Sensor    | Type        | Address | Notes                                             |
-|-----------|-------------|---------|---------------------------------------------------|
-| LM75A     | Temperature | 0x48    | 9-bit resolution, ±2°C accuracy                   |
-| Si7021    | Humidity    | 0x40    | ±3% RH accuracy, fixed I2C address                |
-| LPS25HB   | Pressure    | 0x5C    | Digital sensor with WHO_AM_I and CTRL registers   |
+| Sensor    | Type        | Address | Notes                                             | Datasheets                                                         |
+|-----------|-------------|---------|---------------------------------------------------|--------------------------------------------------------------------|
+| LM75A     | Temperature | 0x48    | 9-bit resolution, ±2°C accuracy                   | https://www.ti.com/lit/ds/symlink/lm75a.pdf                        |
+| Si7021    | Humidity    | 0x40    | ±3% RH accuracy, fixed I2C address                | https://www.silabs.com/documents/public/data-sheets/Si7021-A20.pdf |
+| LPS25HB   | Pressure    | 0x5C    | Digital sensor with WHO_AM_I and CTRL registers   | https://www.st.com/resource/en/datasheet/lps25hb.pdf               |
 
 ---
 
@@ -49,29 +47,95 @@ This project implements firmware for an environmental sensing device that reads 
 
 ### Sensor Interfaces
 
-- **LM75A Temperature Sensor:**  
-  - I2C Interface : Supports up to 8 devices on the same bus via address pins (A2, A1, A0).
-  - 9-bit Temperature Resolution : Accuracy of ±2°C (–25°C to 100°C) and ±3°C (–55°C to 125°C).
-  - Registers :
-  - Temperature Register (0x00) : Read-only, updates every 100ms (or 300ms at extreme temps).
-  - [LM75A Datasheet](https://www.ti.com/lit/ds/symlink/lm75a.pdf)
+This section explains, step by step, how sensor readings are performed via the I2C interface using the implemented code.
 
-- **Si7021 Humidity Sensor:**
-  - The Si7021-A20 is a digital humidity and temperature sensor with:
-  - I2C Interface : 7-bit address 0x40 (fixed, no address pins).
-  - Humidity : ±3% RH (0–80% RH).
-  - Registers :
-  - Humidity/Temperature Measurement Commands (0xE5, 0xE3).
-  - Electronic ID Register for device identification.
-  - [Si7021 Datasheet](https://www.silabs.com/documents/public/data-sheets/Si7021-A20.pdf)
+### LM75A – Temperature Sensor
 
-- **LPS25HB Pressure Sensor:**
-  - The LPS25HB is a digital pressure sensor with:
-  - I2C Interface : Default I2C address 0x5C (SA0=0).
-  - Key Registers :
-  - WHO_AM_I (0x0F) : Identification register (default 0xBD).
-  - CTRL_REG1 (0x20) : Controls power and ODR.
-  - [LPS25HB Datasheet](https://www.st.com/resource/en/datasheet/lps25hb.pdf)
+- **Initialization (`LM75A_Init`):**
+  - **Purpose:** Verify sensor presence before starting temperature measurements.
+  - **Steps:**
+    - **I2C Memory Read:**  
+      - Reads 1 byte from register `0x00` using `HAL_I2C_Mem_Read` with address `LM75A_ADDR` (shifted left by 1).
+    - **Error Handling:**  
+      - If the read operation fails, return `HAL_ERROR`; otherwise, return `HAL_OK`.
+
+- **Temperature Reading (`LM75A_ReadTemperature`):**
+  - **Steps:**
+    - **Data Acquisition:**  
+      - Reads 2 bytes from register `0x00` using `HAL_I2C_Mem_Read`.
+    - **Data Combination:**  
+      - Combines the two bytes into a 16-bit raw temperature value:
+        ```c
+        int16_t raw_temp = (data[0] << 8) | data[1];
+        ```
+    - **Extracting 9-bit Value:**  
+      - Shifts the raw value right by 7 bits to obtain a 9-bit two's complement number:
+        ```c
+        int16_t temp_9bit = raw_temp >> 7;
+        ```
+    - **Handling Negative Values:**  
+      - Checks if the sign bit (bit 8) is set. If yes, computes the two's complement to convert the value to a negative temperature.
+    - **Conversion:**  
+      - Multiplies the result by 0.5 to convert to °C and returns the value.
+
+---
+
+### Si7021 – Humidity & Temperature Sensor
+
+- **Initialization (`Si7021_Init`):**
+  - **Purpose:** Confirm sensor identity.
+  - **Steps:**
+    - **Transmit Command:**  
+      - Sends command `0xFA` to initiate reading the electronic ID.
+    - **Receive Data:**  
+      - Receives 2 bytes of the electronic ID.
+    - **Validation:**  
+      - Checks if the first byte equals `0x06` (expected value). Returns `HAL_ERROR` if not matching; else returns `HAL_OK`.
+
+- **Humidity Reading (`Si7021_ReadHumidity`):**
+  - **Steps:**
+    - **Command Initiation:**  
+      - Sends command `0xE5` to measure relative humidity.
+    - **Delay:**  
+      - Uses `HAL_Delay(20)` to wait for conversion completion.
+    - **Data Acquisition:**  
+      - Receives 2 bytes of humidity data.
+    - **Data Combination:**  
+      - Combines the bytes into a 16-bit raw value.
+    - **Conversion:**  
+      - Converts raw data to RH using:
+        ```c
+        humidity = ((125.0f * raw_humidity) / 65536.0f) - 6.0f;
+        ```
+      - Returns the computed humidity.
+
+---
+
+### LPS25HB – Pressure Sensor
+
+- **Initialization (`LPS25HB_Init`):**
+  - **Purpose:** Verify sensor identity and configure output data rate.
+  - **Steps:**
+    - **Identity Check:**  
+      - Reads the `WHO_AM_I` register (`0x0F`) using `HAL_I2C_Mem_Read`.
+      - Compares the returned value with `0xBD`; returns `HAL_ERROR` if mismatched.
+    - **Configuration:**  
+      - Writes to `CTRL_REG1` (`0x20`) with value `0b10000000` to power the sensor on and set the output data rate to 1 Hz.
+      - Returns `HAL_OK` upon success.
+
+- **Pressure Reading (`LPS25HB_ReadPressure`):**
+  - **Steps:**
+    - **Data Acquisition:**  
+      - Reads 3 bytes from register `0x28` using `HAL_I2C_Mem_Read`.
+    - **Data Combination:**  
+      - Combines the 3 bytes into a 24-bit raw pressure value:
+        ```c
+        int32_t raw_pressure = (data[2] << 16) | (data[1] << 8) | data[0];
+        ```
+    - **Conversion:**  
+      - Divides the raw value by `4096.0f` to convert it to hPa.
+      - Returns the computed pressure.
+
 
 ### Data Filtering and Buffering
 
