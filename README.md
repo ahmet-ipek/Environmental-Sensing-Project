@@ -192,8 +192,7 @@ This section explains, step by step, how sensor readings are performed via the I
 - **UART Transmission:** Captured via a serial terminal, showcasing the data packet format.
 ![pcktOut](https://github.com/user-attachments/assets/9bef8cad-ab91-4bd6-a9f8-380d912d269d)
 
-- **Optional:**  
-- A short video demonstrating UART transmission is available:
+- A short video demonstrating UART transmission:
 
 https://github.com/user-attachments/assets/33b4392e-658a-4985-b325-56ed46d2b83c
 
