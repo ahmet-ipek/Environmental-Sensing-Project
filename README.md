@@ -46,6 +46,8 @@ Two hardware timers manage system tasks:
     htim3.Init.Period = 9999;
     HAL_TIM_Base_Init(&htim3);
     ```
+![int1sec](https://github.com/user-attachments/assets/3bad1a19-124b-476a-ab4f-4d0b80dc61bb)
+    
 - **Timer 2 (TIM2):**  
   - Configured to trigger an interrupt every 30 seconds to transmit data.
   - Example configuration snippet:
@@ -56,6 +58,9 @@ Two hardware timers manage system tasks:
     htim2.Init.Period = 29999;
     HAL_TIM_Base_Init(&htim2);
     ```
+![int30sec](https://github.com/user-attachments/assets/b62c0a2c-012a-4936-8490-efcbfc174fdb)
+
+    
 
 These timers are verified using a logic analyzer, confirming the precise 1 Hz and 30-second intervals.
 
