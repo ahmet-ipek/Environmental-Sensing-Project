@@ -182,5 +182,19 @@ This section explains, step by step, how sensor readings are performed via the I
 
 ---
 
+## Simulation & Testing
+
+- **Mock Data:**  
+- Since physical sensors were not available during development, sensor values are simulated using randomized functions.
+- Real sensor code is included in `main.c` as commented sections for easy activation when hardware is available.
+
+- **Verification:**  
+- **UART Transmission:** Captured via a serial terminal, showcasing the data packet format.
+![pcktOut](https://github.com/user-attachments/assets/9bef8cad-ab91-4bd6-a9f8-380d912d269d)
+
+- **Optional:**  
+- A short video demonstrating UART transmission is available:
+
+
 
 
