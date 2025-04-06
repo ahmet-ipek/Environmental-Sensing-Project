@@ -5,7 +5,11 @@
 This project implements firmware for an environmental sensing device that reads data from multiple sensors and transmits aggregated statistics periodically. The system is built on an STM32F4 series microcontroller and uses I2C to interface with sensors for temperature, humidity, and pressure. Although the design originally intended to use BLE for data transmission, UART has been used in this implementation due to hardware constraints.
 
 ## Flowchart
-![flowchart](https://github.com/user-attachments/assets/037a5a08-6b4d-49bf-baa0-2f4daf4bd89f)
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/037a5a08-6b4d-49bf-baa0-2f4daf4bd89f" alt="Description" />
+</p>
+
+
 
 
 ---
