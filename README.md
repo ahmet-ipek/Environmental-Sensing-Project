@@ -28,6 +28,24 @@ This project implements firmware for an environmental sensing device that reads 
 
 ## System Architecture
 
+## 📐 System Architecture
+
+| Component           | Description                                         |
+|---------------------|-----------------------------------------------------|
+| MCU                 | STM32F446RE (ARM Cortex-M4)                         |
+| IDE                 | STM32CubeIDE                                        |
+| Interface           | I2C (sensors), UART (transmission)                 |
+| Interrupt Timers    | TIM3 (1 Hz for sampling), TIM2 (30s for sending)   |
+
+### 🔌 Sensors
+
+| Sensor    | Type        | Address | Notes                                             |
+|-----------|-------------|---------|---------------------------------------------------|
+| LM75A     | Temperature | 0x48    | 9-bit resolution, ±2°C accuracy                   |
+| Si7021    | Humidity    | 0x40    | ±3% RH accuracy, fixed I2C address                |
+| LPS25HB   | Pressure    | 0x5C    | Digital sensor with WHO_AM_I and CTRL registers   |
+
+
 - **MCU:** STM32F446RE microcontroller.
 - **IDE:** STM32CubeIDE.
 - **Sensors:**
