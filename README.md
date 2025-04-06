@@ -195,6 +195,8 @@ This section explains, step by step, how sensor readings are performed via the I
 - **Optional:**  
 - A short video demonstrating UART transmission is available:
 
+https://github.com/user-attachments/assets/33b4392e-658a-4985-b325-56ed46d2b83c
+
 
 
 
