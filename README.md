@@ -11,7 +11,7 @@ This project implements firmware for an environmental sensing device that reads 
 - **Sensor Data Acquisition:** Sample environmental parameters (temperature, humidity, and pressure) at 1 Hz using three I2C sensors.
 - **Data Filtering:** Implement a moving median filter to smooth out sensor data.
 - **Data Buffering:** Store filtered values in a circular buffer.
-- **Data Transmission:** Transmit aggregated sensor statistics every 30 seconds using UART (substitute for BLE).
+- **Data Transmission:** Transmit aggregated sensor statistics every 30 seconds using UART.
 
 ---
 
